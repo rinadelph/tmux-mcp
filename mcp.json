@@ -26,7 +26,8 @@
     "prompts": [
       "quick_message",
       "setup_timer",
-      "manage_auto_cycle"
+      "manage_auto_cycle",
+      "launch_agent"
     ]
   }
 }
