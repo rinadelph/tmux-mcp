@@ -8,7 +8,8 @@ A comprehensive tmux control system implementing the Model Context Protocol (MCP
 - **Full MCP Protocol Implementation**: JSON-RPC 2.0 over stdio
 - **Tools**: 
   - `list_tmux_sessions`: List all active tmux sessions
-  - `send_message_to_session`: Send messages to specific sessions
+  - `send_message_to_session`: Send messages (types, waits 1s, then Enter)
+  - `launch_agent`: Launch AI agents (gemini, claude, codex, swarm)
   - `start_message_timer`: Set up repeated message sending
   - `stop_message_timer`: Stop active timers
   - `start_auto_cycle`: Start automated exit/continue cycles
