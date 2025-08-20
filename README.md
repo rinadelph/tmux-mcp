@@ -34,14 +34,60 @@ A comprehensive tmux control system implementing the Model Context Protocol (MCP
 
 ## 🔧 Installation
 
-### Using pip
+### Prerequisites
 ```bash
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Or using uv (recommended)
+uv sync
 ```
 
-### Using uv (recommended for MCP server)
+### Add to Claude Desktop
+
+#### Option 1: Using Claude CLI (Recommended)
 ```bash
-uv sync
+# Clone the repository
+git clone https://github.com/rinadelph/tmux-mcp.git
+cd tmux-mcp
+
+# Add to Claude (user-level, available in all sessions)
+claude mcp add --scope user --transport stdio tmux-control python "$(pwd)/tmux_mcp_server.py"
+
+# Or add locally (current project only)
+claude mcp add --transport stdio tmux-control python "$(pwd)/tmux_mcp_server.py"
+```
+
+#### Option 2: Manual Configuration
+Add this to your Claude Desktop configuration file:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
+**Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "tmux-control": {
+      "command": "python",
+      "args": [
+        "/absolute/path/to/tmux-mcp/tmux_mcp_server.py"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+Replace `/absolute/path/to/tmux-mcp/` with the actual path where you cloned the repository.
+
+### Verify Installation
+```bash
+# Check if the server is connected
+claude mcp list
+
+# You should see:
+# tmux-control: python /path/to/tmux_mcp_server.py - ✓ Connected
 ```
 
 ## 🎯 Usage
