@@ -451,6 +451,85 @@ async def stop_auto_cycle(
 
 
 @mcp.tool()
+async def launch_agent(
+    agent: str,
+    session_name: str,
+    ctx: Context
+) -> Dict[str, Any]:
+    """
+    Launch an AI agent in a tmux session
+    
+    Supported agents:
+    - gemini: Launch Gemini CLI
+    - claude: Launch Claude CLI  
+    - codex: Launch Codex CLI
+    - swarm: Launch SwarmCode
+    
+    Args:
+        agent: The agent to launch (gemini, claude, codex, or swarm)
+        session_name: Name of the tmux session to launch in
+    
+    Returns success status and details
+    """
+    # Map agent names to commands
+    agent_commands = {
+        "gemini": "gemini",
+        "claude": "claude",
+        "codex": "codex",
+        "swarm": "swarmcode"
+    }
+    
+    # Validate agent
+    if agent.lower() not in agent_commands:
+        await ctx.error(f"Unknown agent: {agent}. Supported: {', '.join(agent_commands.keys())}")
+        return {
+            "success": False,
+            "error": f"Unknown agent: {agent}. Supported agents: gemini, claude, codex, swarm"
+        }
+    
+    command = agent_commands[agent.lower()]
+    await ctx.info(f"Launching {agent} in session '{session_name}' with command: {command}")
+    
+    try:
+        # Send the command to launch the agent
+        proc = await asyncio.create_subprocess_exec(
+            'tmux', 'send-keys', '-t', session_name, command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        _, stderr = await proc.communicate()
+        
+        if proc.returncode != 0:
+            error_msg = stderr.decode().strip()
+            await ctx.error(f"Failed to launch {agent}: {error_msg}")
+            return {"success": False, "error": error_msg}
+        
+        # Wait a moment
+        await asyncio.sleep(0.5)
+        
+        # Send Enter to execute
+        proc2 = await asyncio.create_subprocess_exec(
+            'tmux', 'send-keys', '-t', session_name, 'Enter',
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        await proc2.communicate()
+        
+        await ctx.info(f"Successfully launched {agent} in '{session_name}'")
+        return {
+            "success": True,
+            "agent": agent,
+            "command": command,
+            "session": session_name,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        await ctx.error(f"Error launching {agent}: {str(e)}")
+        return {"success": False, "error": str(e)}
+
+
+@mcp.tool()
 async def send_ctrl_c(
     session_name: str,
     ctx: Context,
