@@ -162,6 +162,8 @@ async def send_message_to_session(
     """
     Send a message to a specific tmux session
     
+    Types the message, waits 1 second, then presses Enter
+    
     Args:
         session_name: Name of the tmux session
         message: Message to send
@@ -171,7 +173,7 @@ async def send_message_to_session(
     await ctx.info(f"Sending message to session '{session_name}': {message}")
     
     try:
-        # Send the message
+        # Send the message (just type it)
         proc1 = await asyncio.create_subprocess_exec(
             'tmux', 'send-keys', '-t', session_name, message,
             stdout=asyncio.subprocess.PIPE,
@@ -184,9 +186,12 @@ async def send_message_to_session(
             await ctx.error(f"Failed to send message: {error_msg}")
             return {"success": False, "error": error_msg}
         
+        # Wait 1 second
+        await asyncio.sleep(1)
+        
         # Send Enter key
         proc2 = await asyncio.create_subprocess_exec(
-            'tmux', 'send-keys', '-t', session_name, 'C-m',
+            'tmux', 'send-keys', '-t', session_name, 'Enter',
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
         )
