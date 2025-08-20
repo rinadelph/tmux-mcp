@@ -11,6 +11,7 @@
     "tools": [
       "list_tmux_sessions",
       "send_message_to_session",
+      "launch_agent",
       "start_message_timer",
       "stop_message_timer",
       "start_auto_cycle",
