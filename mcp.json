@@ -1,0 +1,31 @@
+{
+  "name": "tmux-control",
+  "description": "MCP server for controlling tmux sessions",
+  "transport": "stdio",
+  "command": "python",
+  "args": [
+    "${PROJECT_PATH}/tmux_mcp_server.py"
+  ],
+  "env": {},
+  "capabilities": {
+    "tools": [
+      "list_tmux_sessions",
+      "send_message_to_session",
+      "start_message_timer",
+      "stop_message_timer",
+      "start_auto_cycle",
+      "stop_auto_cycle",
+      "send_ctrl_c"
+    ],
+    "resources": [
+      "tmux://sessions",
+      "tmux://timers",
+      "tmux://cycles"
+    ],
+    "prompts": [
+      "quick_message",
+      "setup_timer",
+      "manage_auto_cycle"
+    ]
+  }
+}
