@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "tmux-control": {
+      "command": "python",
+      "args": [
+        "/home/alejandro/Code/tmux/tmux_mcp_server.py"
+      ],
+      "env": {}
+    }
+  }
+}
