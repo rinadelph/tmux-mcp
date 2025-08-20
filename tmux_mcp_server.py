@@ -615,6 +615,20 @@ Use the start_auto_cycle tool."""
         return f"Please stop the auto-cycle for tmux session '{session_name}' using the stop_auto_cycle tool."
 
 
+@mcp.prompt(title="Launch AI Agent")
+def launch_agent_prompt(agent: str, session_name: str) -> str:
+    """Launch an AI agent in a tmux session"""
+    return f"""Please launch the {agent} agent in tmux session '{session_name}'.
+
+Available agents:
+- gemini: Gemini CLI
+- claude: Claude CLI  
+- codex: Codex CLI
+- swarm: SwarmCode (uses 'swarmcode' command)
+
+Use the launch_agent tool to start the agent."""
+
+
 # Main entry point
 if __name__ == "__main__":
     # Run the MCP server using stdio transport
